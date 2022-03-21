@@ -1,0 +1,61 @@
+# .netHTML
+Modelo
+  [NotMapped]
+  public IFormFile ImagenFile { get; set; }
+  
+  ---------------------------------------------
+  
+  Controlador
+  
+        private readonly IWebHostEnvironment webHostEnvironment;    //Se agrega despues del contexto
+        private string uFilename;
+
+        public VentaTsController(AppchiclesContext context, IWebHostEnvironment webHost )
+        {
+            _context = context;
+            webHostEnvironment = webHost;
+        }
+        
+        //en el metodo de crear
+        
+                public async Task<IActionResult> Create(VentaT ventaT) //Se quitan parametros
+        {
+            if (ModelState.IsValid)
+            {
+                string uFileName = UploadedFile(ventaT); //Se agrega
+                ventaT.imagen = uFileName; //Se agrega
+                
+        
+        
+                private string UploadedFile(VentaT ventaT)
+        {
+            string uFileName = null;
+
+            if (ventaT.ImagenFile != null)
+            {
+                string uploadsFolder = Path.Combine(webHostEnvironment.WebRootPath, "Images");
+                uFileName = Guid.NewGuid().ToString() + "_" + ventaT.ImagenFile.FileName;
+                string filePath = Path.Combine(uploadsFolder, uFileName);
+                using (var myFileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    ventaT.ImagenFile.CopyTo(myFileStream);
+                }
+            }
+            return uFileName;
+
+
+        }
+        
+        -------------------------------------------------------------
+        
+        HTML
+        
+        Se agrega en la vista de create 
+        
+             <div class="form-group">
+                <label asp-for="ImagenFile" class="control-label"></label>
+                <input type="file" asp-for = "ImagenFile" class="form-control" />
+                <span asp-validation-for="ImagenFile" class="text-danger"></span>
+            </div>
+  
+  
