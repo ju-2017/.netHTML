@@ -1,0 +1,73 @@
+# .netHTML
+
+
+create database AppCine
+
+use AppCine 
+
+use master
+
+create table Ciudades (
+idCiudad int identity (1,1) primary key,
+NombreCiudad varchar (30) not null
+
+)
+
+
+create table Usuario(
+
+iduser int identity (1,1) primary key,
+Nombreuser varchar (30) not null, 
+Apellidouser varchar (30) not null,
+Fechadenacimiento varchar (30) not null, 
+contraseña varchar not null,
+ciudad int foreign key (ciudad) references Ciudades (idCiudad)
+
+
+)
+create table Cines(
+idcine int identity (1,1) primary key ,
+nomcine varchar (30) not null
+)
+
+create table GeneroPelicula(
+
+idgenero int identity (1,1) primary key ,
+nomgenero varchar (30)
+
+)
+
+create table Pelicula(
+
+idpeli int identity (1,1) primary key,
+nompeli varchar (30) not null,
+fotoportada nvarchar (500),
+reseña varchar (30),
+cine int foreign key (cine) references Cines (idcine),
+genero int foreign key (genero) references GeneroPelicula (idgenero)
+
+)
+
+create table Venta (
+
+idVenta int identity (1,1) primary key,
+cantidad int not null,
+precio float not null,
+idpelicula int foreign key (idpelicula) references Pelicula (idpeli),
+idusuario int foreign key (idusuario) references Usuario (iduser)
+)
+
+create table Materia(
+
+idMateria int identity (1,1) primary key,
+materia varchar (30)
+
+)
+
+create table NotaFinal(
+
+idNotafinal int identity (1,1) primary key,
+nota float not null,
+idusuario int foreign key (idusuario) references Usuario (iduser),
+nommateria int foreign key (nommateria) references Materia (idMateria)
+)
